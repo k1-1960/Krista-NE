@@ -1,0 +1,15 @@
+# Node modules
+node_modules/
+
+# Enviroment
+.env
+.env.test
+
+# Testing
+*test.*
+test/
+log.txt
+
+# Packagers
+yarn.lock
+package-lock.json
