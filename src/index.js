@@ -4,6 +4,13 @@ const client = new Client();
 const colors = require('colors');
 const config = require('./config');
 
+const {Collection} = require ('discord.js');
+
+client.commands = new Collection();
+
 client.login(config.discord.TOKEN, () => {
-  // console.log('<Info> '.blue + 'Procediendo inicio de sesión.');
+  console.log('<Info> '.blue + 'Procediendo inicio de sesión.');
+  require(process.cwd() + '/src/handlers/eventos')(client);
+  require(process.cwd() + '/src/handlers/comandos')(client);
 });
+require('./util/handleErrors.js');
