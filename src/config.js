@@ -1,6 +1,11 @@
 require("dotenv").config();
-const whatCase = l => l === l.toUpperCase() ? true: false;
-const percentage = function (origin, resta) {
+
+function whatCase (l) {
+  if (l === l.toUpperCase()) return true;
+  if (l === l.toLowerCase()) return false;
+}
+
+function percentage (origin, resta) {
   let restado = origin - resta;
   return ((restado * 100)/origin);
 };
@@ -16,6 +21,12 @@ async function deleteMessage (msg, time) {
 }
 
 module.exports = {
+  models: require('./models'),
+  
+  keys: {
+    MongoDB: process.env.MongoDB
+  },
+
   discord: {
     TOKEN: process.env.TOKEN
   },
@@ -30,21 +41,38 @@ module.exports = {
 
       for (let i = 0; i < texto.length; i++) {
         let letter = texto[i];
+        let nan = isNaN(letter);
+        let isLe = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz'.includes(letter);
+        let Case = whatCase(letter);
 
-        whatCase(letter) === true ? upper = upper + 1: lower = lower + 1;
+        if (Case === true && isLe === true) upper = upper + 1;
+        if (Case === false && isLe === true) lower = lower + 1;
       }
 
-      if (percentage(texto.length, lower) > 75) {
+      let per = percentage(texto.length, lower);
+      console.log(per);
+      if (per > 75) {
         await message.delete();
         await message.channel.send({
           content: message.author.toString(),
           embeds: [{
             title: "Tu mensaje se eliminó.",
-            description: "Se eliminó debido a que contiene el 75% o más de sus caracteres en mayúsculas.",
+            fields: [{
+              name: 'Razón',
+              value: "Contiene el 75% o más de sus caracteres en mayúsculas."
+            }],
+            footer: {
+              text: 'Para evitar esto, usa menos mayúsculas o pide a algún administrador del servidor que inhabilite esta función.'
+            },
             color: 0xc42112
           }]
-        }).then(m => deleteMessage(m, 7.5));
+        }).then(m => deleteMessage(m, 15));
       }
     }
+  },
+
+  util: {
+    deleteMessage,
+    percentage
   }
 }
