@@ -1,24 +1,9 @@
 require("dotenv").config();
-
-function whatCase (l) {
-  if (l === l.toUpperCase()) return true;
-  if (l === l.toLowerCase()) return false;
-}
-
-function percentage (origin, resta) {
-  let restado = origin - resta;
-  return ((restado * 100)/origin);
-};
-
-async function deleteMessage (msg, time) {
-  if (time) {
-    setTimeout(async () => {
-      await msg.delete();
-    }, time * 1000);
-  } else {
-    await msg.delete();
-  }
-}
+const {
+  whatCase,
+  percentage,
+  deleteMessage
+} = require('./util/functions');
 
 module.exports = {
   models: require('./models'),
@@ -56,13 +41,34 @@ module.exports = {
         await message.channel.send({
           content: message.author.toString(),
           embeds: [{
-            title: "Tu mensaje se eliminó.",
+            title: "Mensaje eliminado.",
             fields: [{
               name: 'Razón',
               value: "Contiene el 75% o más de sus caracteres en mayúsculas."
             }],
             footer: {
               text: 'Para evitar esto, usa menos mayúsculas o pide a algún administrador del servidor que inhabilite esta función.'
+            },
+            color: 0xc42112
+          }]
+        }).then(m => deleteMessage(m, 15));
+      }
+    },
+    Attachments: async (message, guildData) => {
+      let attachments = message.attachments;
+      let limit = guildData.antiAttachmentSpam.max;
+      
+      if (limit > 0 && attachments.size > limit) {
+        await message.delete();
+        await message.channel.send({
+          embeds: [{
+            title: "Mensaje eliminado.",
+            fields: [{
+              name: 'Razón',
+              value: "Excedió el maximo de archivos (attachments) permitidos en un mensaje."
+            }],
+            footer: {
+              text: 'Para evitar esto, envía archivos sin exceder la cantidad permitida por los administradores o pide a algún administrador del servidor que inhabilite esta función.'
             },
             color: 0xc42112
           }]

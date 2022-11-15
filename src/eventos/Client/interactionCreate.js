@@ -22,6 +22,7 @@ module.exports.run = async (client, interaction) => {
       try {
         client.config = config;
         client._defColor = interaction.guild.members.me.displayHexColor;
+        client._defIntColor = parseInt(interaction.guild.members.me.displayHexColor.replace('#', '0x'));
         client._emojis = {
           emojis: '<:emojis:1041139726394065046>',
           hashtag: '<:hashtag:1041139630235471954>',

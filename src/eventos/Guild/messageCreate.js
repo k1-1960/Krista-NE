@@ -9,11 +9,16 @@ module.exports = {
     }) || new config.models.Guild({
       _id: message.guild.id
     }).save();
+    
+    console.log(guildData.antiAttachmentSpam)
 
     let roles = await message.member.roles.cache.map((role) => role.id);
 
     if (!roles.some(r => guildData.antiUpperCase.ignoredRoles.includes(r))) {
       config.security.Uppercase(message);
+    }
+    if (!roles.some(r => guildData.antiAttachmentSpam.ignoredRoles.includes(r))) {
+      config.security.Attachments(message, guildData);
     }
   }
 };
