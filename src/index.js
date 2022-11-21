@@ -14,7 +14,7 @@ require('./mongodb')(config.keys.MongoDB);
 
 client.login(config.discord.TOKEN, () => {
   console.log('<Info> '.blue + 'Procediendo inicio de sesión.');
+  require(process.cwd() + '/src/handlers/distube')(client);
   require(process.cwd() + '/src/handlers/eventos')(client);
   require(process.cwd() + '/src/handlers/comandos')(client);
 });
-require('./util/handleErrors.js');

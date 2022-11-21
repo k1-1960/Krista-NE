@@ -4,6 +4,7 @@ const {
   percentage,
   deleteMessage
 } = require('./util/functions');
+let UserEveryones = [];
 
 module.exports = {
   models: require('./models'),
@@ -17,7 +18,9 @@ module.exports = {
   },
 
   security: {
-    Uppercase: async (message) => {
+    
+    
+    async Uppercase (message) {
       if (message.author.bot || message.content.length < 60) return;
       let texto = message.content;
 
@@ -54,7 +57,8 @@ module.exports = {
         }).then(m => deleteMessage(m, 15));
       }
     },
-    Attachments: async (message, guildData) => {
+    
+    async Attachments (message, guildData) {
       let attachments = message.attachments;
       let limit = guildData.antiAttachmentSpam.max;
       
@@ -74,7 +78,32 @@ module.exports = {
           }]
         }).then(m => deleteMessage(m, 15));
       }
+    },
+    
+    async Everyone (message) {
+      if (message.everyone) {
+        UserEveryones.push({
+          uid: message.author.id,
+          mid: message.id,
+          ts: (+Date.now() / 1000)
+        });
+        
+        let thisUserEveryones = UserEveryones
+        .filter(obj => obj.uid === message.author.id);
+        console.log(thisUserEveryones);
+        if (thisUserEveryones.length >= 2) {
+          if ((thisUserEveryones[0].ts + 30) > thisUserEveryones[1].ts) {
+            thisUserEveryones.forEach(x => {
+              let everyone = message.channel.messages.fetch(x.mid).then(m => m.delete());
+            })
+          }
+        }
+      }
+      
+      
     }
+    
+    
   },
 
   util: {

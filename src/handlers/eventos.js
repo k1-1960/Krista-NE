@@ -12,15 +12,19 @@ function Events (client) {
   .forEach(function (folder) {
     readdirSync(rd(`src/eventos/${folder}`))
     .filter(f => f.endsWith('.js'))
-      .forEach(file => {
-        const event = require(rd(`src/eventos/${folder}/${file}`));
+    .forEach(file => {
+      const event = require(rd(`src/eventos/${folder}/${file}`));
+      if (folder.toLowerCase() === "distube") {
+        client.distube.on(event.name, (...args) => event.run(client, ...args));
+      } else {
         try {
           client.on(event.name, (...args) => event.run(client, ...args));
         } catch (error) {
           console.log(error);
         }
-      });
+      }
     });
-  }
+  });
+}
 
-  module.exports = Events;
+module.exports = Events;

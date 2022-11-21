@@ -3,6 +3,7 @@ const {
 } = require('discord.js');
 
 module.exports = {
+  def_permission: 'ManageGuild',
   data: {
     name: 'sistemas',
     description: 'Configura los sistemas del bot.',

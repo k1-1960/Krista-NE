@@ -3,13 +3,13 @@ const {
   GatewayIntentBits
 } = Discord;
 const colors = require('colors');
-
 const default_options = {
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
+    GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildVoiceStates
   ]
 };
 

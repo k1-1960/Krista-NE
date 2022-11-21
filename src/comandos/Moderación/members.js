@@ -1,5 +1,6 @@
 const {
-  EmbedBuilder
+  EmbedBuilder,
+  PermissionsBitField
 } = require('discord.js');
 
 module.exports = {
@@ -43,10 +44,23 @@ module.exports = {
   async run (client, int, {
     guildData
   }) {
+    
+    const getPerm = (perm) => {
+      if(!int.member.permissions.has(PermissionsBitField.Flags[perm])) return int.reply({
+        embeds: [
+          new EmbedBuilder()
+          .setTitle('Permisos insuficientes.')
+          .setDescription('No cumples con los permisos suficientes para realizar esta acción, si crees que se trata de un error, contacta s mi desarrollador.')
+          .setColor('#c42112')
+        ]
+      });
+    }
+    
     const group = int.options.getSubcommandGroup();
     const subcommand = int.options.getSubcommand();
 
     if (subcommand === 'kick') {
+      getPerm("KickMembers");
       let razon = int.options.getString('razon') || "No se dió una razón.";
       let u = int.options.getUser('usuario');
       let member = await int.guild.members.fetch(u.id);
@@ -101,6 +115,7 @@ module.exports = {
       }
     }
     if (subcommand === 'ban') {
+      getPerm('BanMembers');
       let razon = int.options.getString('razon') || "No se dió una razón.";
       let u = int.options.getUser('usuario');
       let member = await int.guild.members.fetch(u.id);
