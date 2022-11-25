@@ -4,12 +4,28 @@ const {
 
 module.exports = {
   data: {
-    name: 'userinfo',
+    name: 'usuario-info',
+    name_localizations: {
+      'en-US': 'user-info',
+      'es-ES': 'usuario-info'
+    },
     description: 'Obten información de un usuario.',
+    description_localizations: {
+      'en-US': 'Get information from a user.',
+      'es-ES': 'Obten información de un usuario.'
+    },
     options: [{
       type: 6,
       name: 'usuario',
-      description: 'Usuario del cual ver su información.',
+      name_localizations: {
+        'en-US': 'user',
+        'es-ES': 'usuario'
+      },
+      description: 'Usuario cuya información desea ver.',
+      description_localizations: {
+        'es-ES': 'User whose information to see.',
+        'en-US': 'Usuario cuya información desea ver.'
+      },
       required: false
     }]
   },

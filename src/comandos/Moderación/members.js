@@ -6,168 +6,95 @@ const {
 module.exports = {
   data: {
     name: 'moderacion',
-    description: 'Comando de moderación.',
+    name_localizations: {
+      'en-US': 'moderation',
+      'es-ES': 'moderacion'
+    },
+    description: 'Comandos de moderación.',
+    description_localizations: {
+      'es-ES': 'Comandos de moderación.',
+      'en-US': 'Moderation commands.'
+    },
     dm_permission: false,
     options: [{
       type: 1,
       name: 'kick',
+      name_localizations: {
+        'es-ES': 'expulsar',
+        'en-US': 'kick'
+      },
       description: 'Expulsa un miembro del servidor.',
+      description_localizations: {
+        'en-US': 'Ejects a member from the server.',
+        'es-ES': 'Expulsa a un miembro del servidor.'
+      },
       options: [{
         type: 6,
         name: 'usuario',
-        description: 'Usuario al que deseas expulsar del servidor.',
+        name_localizations: {
+          'es-ES': 'usuario',
+          'en-US': 'user'
+        },
+        description: 'Usuario que desea expulsar del servidor.',
+        description_localizations: {
+          'en-US': 'User you want to kick from the server.',
+          'es-ES': 'Usuario que desea expulsar del servidor.'
+        },
         required: true
       },
         {
           type: 3,
           name: 'razon',
-          description: 'Razón de la expulsión ("No se dió una razón" si no se da una).',
+          name_localizations: {
+            'es-ES': 'razon',
+            'en-US': 'reason'
+          },
+          description: 'Motivo de la expulsión ("No se da ningún motivo" si no se da uno).',
+          description_localizations: {
+            'es-ES': 'Motivo de la expulsión ("No se da ningún motivo" si no se da uno).',
+            'en-US': 'Reason for expulsion ("No reason given" if one is not given).'
+          },
           required: false
         }]
     }, {
       type: 1,
       name: 'ban',
-      description: 'Banea a un usuario del servidor.',
+      name_localizations: {
+        'es-ES': 'ban',
+        'en-US': 'ban'
+      },
+      description: 'Prohíbe a un usuario del servidor.',
+      description_localizations: {
+        'en-US': 'Bans a user from the server.',
+        'es-ES': 'Prohíbe a un usuario del servidor.'
+      },
       options: [{
         type: 6,
         name: 'usuario',
-        description: 'Usuario al que deseas banear.',
+        name_localizations: {
+          'es-ES': 'usuario',
+          'en-US': 'user'
+        },
+        description: 'Usuario que desea banear.',
+        description_localizations: {
+          'en-US': 'User you want to ban.',
+          'es-ES': 'Usuario que desea banear.'
+        },
         required: true
       }, {
         type: 3,
         name: 'razon',
-        description: 'Razón de el baneo ("No se dió una razón" si no se da una).',
+        name_localizations: {
+          'es-ES': 'razon',
+          'en-US': 'reason'
+        },
+        description: 'Motivo de la prohibición ("No se ha dado ningún motivo" si no se ha dado ningún motivo).',
+        description_localizations: {
+          'en-US': 'Reason for ban ("No reason given" if no reason given).',
+          'es-ES': 'Motivo de la prohibición ("No se ha dado ningún motivo" si no se ha dado ningún motivo).'
+        },
         required: false
       }]
     }]
-  },
-  async run (client, int, {
-    guildData
-  }) {
-    
-    const getPerm = (perm) => {
-      if(!int.member.permissions.has(PermissionsBitField.Flags[perm])) return int.reply({
-        embeds: [
-          new EmbedBuilder()
-          .setTitle('Permisos insuficientes.')
-          .setDescription('No cumples con los permisos suficientes para realizar esta acción, si crees que se trata de un error, contacta s mi desarrollador.')
-          .setColor('#c42112')
-        ]
-      });
-    }
-    
-    const group = int.options.getSubcommandGroup();
-    const subcommand = int.options.getSubcommand();
-
-    if (subcommand === 'kick') {
-      getPerm("KickMembers");
-      let razon = int.options.getString('razon') || "No se dió una razón.";
-      let u = int.options.getUser('usuario');
-      let member = await int.guild.members.fetch(u.id);
-
-      if (u.id === client.user.id) return int.reply({
-        embeds: [
-          new EmbedBuilder()
-          .setTitle('Uh?')
-          .setDescription('Si quieres que salga de este servidor, usa el comando \`/bot salir-del-servidor\`.')
-          .setColor(0x7c7a9d)
-        ]
-      });
-
-
-      let pos = int.member.roles.highest.comparePositionTo(member.roles.highest);
-
-      if (!member.kickable) return int.reply({
-        embeds: [
-          new EmbedBuilder()
-          .setTitle('Error.')
-          .setDescription('No puedo expulsar al usuario seleccionado.')
-          .setColor(0xc42112)
-        ]
-      });
-
-      if (pos <= 0) return int.reply({
-        embeds: [
-          new EmbedBuilder()
-          .setTitle('Error.')
-          .setDescription('No puedes expulsar a el usuario seleccionado debido a que posee un rol igual o mayor al tuyo.')
-          .setFooter({
-            text: `El rol más alto del usuario es @${member.roles.highest.name}.`
-          })
-          .setColor(0xc42112)
-        ]
-      });
-      try {
-        await member.kick(razon).then(int.reply({
-          embeds: [
-            new EmbedBuilder()
-            .setTitle('Exito.')
-            .setDescription(`[${u.tag} (${u.id})](https://discord.com/users/${u.id}) fue expulsado correctamente.`)
-            .addFields([{
-              name: 'Razón',
-              value: razon
-            }])
-            .setColor(client._defColor)
-          ]
-        }));
-      } catch (err) {
-        console.log(err)
-      }
-    }
-    if (subcommand === 'ban') {
-      getPerm('BanMembers');
-      let razon = int.options.getString('razon') || "No se dió una razón.";
-      let u = int.options.getUser('usuario');
-      let member = await int.guild.members.fetch(u.id);
-      
-      if (u.id === client.user.id) return int.reply({
-        embeds: [
-          new EmbedBuilder()
-          .setTitle('Uh?')
-          .setDescription('Si quieres que salga de este servidor, usa el comando \`/bot salir-del-servidor\`.')
-          .setColor(0x7c7a9d)
-        ]
-      });
-      
-      let pos = int.member.roles.highest.comparePositionTo(member.roles.highest);
-
-      if (!member.bannable) return int.reply({
-        embeds: [
-          new EmbedBuilder()
-          .setTitle('Error.')
-          .setDescription('No puedo banear al usuario seleccionado.')
-          .setColor(0xc42112)
-        ]
-      });
-
-      if (pos <= 0) return int.reply({
-        embeds: [
-          new EmbedBuilder()
-          .setTitle('Error.')
-          .setDescription('No puedes banear a el usuario seleccionado debido a que posee un rol igual o mayor al tuyo.')
-          .setFooter({
-            text: `El rol más alto del usuario es @${member.roles.highest.name}.`
-          })
-          .setColor(0xc42112)
-        ]
-      });
-      
-      try {
-        await member.ban(razon).then(int.reply({
-          embeds: [
-            new EmbedBuilder()
-            .setTitle('Exito.')
-            .setDescription(`[${u.tag} (${u.id})](https://discord.com/users/${u.id}) fue baneado correctamente.`)
-            .addFields([{
-              name: 'Razón',
-              value: razon
-            }])
-            .setColor(client._defColor)
-          ]
-        }));
-      } catch (err) {
-        console.log(err)
-      }
-    }
   }
 };

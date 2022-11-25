@@ -1,10 +1,21 @@
 require("dotenv").config();
+
 const {
   whatCase,
   percentage,
   deleteMessage
 } = require('./util/functions');
 let UserEveryones = [];
+
+const {
+  REST
+} = require('@discordjs/rest');
+const {
+  Routes
+} = require('discord-api-types/v10');
+const rest = new REST({
+  version: "10"
+}).setToken(process.env.TOKEN);
 
 module.exports = {
   models: require('./models'),
@@ -14,7 +25,16 @@ module.exports = {
   },
 
   discord: {
-    TOKEN: process.env.TOKEN
+    TOKEN: process.env.TOKEN,
+    async publishCommands (commands) {
+      await rest.put(
+        Routes.applicationCommands(
+          "1009501419415552030"
+        ), {
+          body: commands
+        }
+      );
+    }
   },
 
   security: {

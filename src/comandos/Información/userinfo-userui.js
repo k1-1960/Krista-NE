@@ -5,6 +5,10 @@ const {
 module.exports = {
   data: {
     name: 'user information',
+    name_localizations: {
+      'es-ES': 'informacion de usuario',
+      'en-US': 'user information'
+    },
     type: 2
   },
   async run (client, int) {

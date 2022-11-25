@@ -7,8 +7,16 @@ const fs = require('fs');
 
 module.exports = {
   data: {
-    name: 'serverinfo',
-    description: 'Información general sobre el servidor.'
+    name: 'servidor',
+    name_localizations: {
+      'en-US': 'server',
+      'es-ES': 'servidor'
+    },
+    description: 'Información general sobre el servidor.',
+    description_localizations: {
+      'en-US': 'General information about the server.',
+      'es-ES': 'Información general sobre el servidor.'
+    }
   },
 
   async run (client, int) {

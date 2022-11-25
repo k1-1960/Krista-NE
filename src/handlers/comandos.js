@@ -1,47 +1,38 @@
+require("dotenv").config();
 const {
   readdirSync
 } = require('fs');
+const colors = require('colors');
+const glob = require('glob');
 const path = require('path');
-require("dotenv").config();
-const {
-  REST
-} = require('@discordjs/rest');
-const {
-  Routes
-} = require('discord-api-types/v10');
-const rest = new REST({
-  version: "10"
-}).setToken(process.env.TOKEN);
 
-function rd (folder) {
-  return path.join(process.cwd(), folder);
-}
+let filePaths = glob.sync('src/comandos/**/*.js')
+.map(a => path.join(process.cwd(), a));
 
-async function Commands (client) {
-  const allCommands = [];
-
-  readdirSync(rd('src/comandos'))
-  .forEach(function (folder) {
-    readdirSync(rd(`src/comandos/${folder}`))
-    .filter(f => f.endsWith('.js'))
-    .forEach(file => {
-      const command = require(rd(`src/comandos/${folder}/${file}`));
-      try {
-        client.commands.set(command.data.name, command);
-        allCommands.push(command.data);
-      } catch (error) {
-        console.log(error);
+module.exports = async (client) => {
+  for (let filePath of filePaths) {
+    try {
+      const file = require(filePath);
+      if (file.subcommand) {
+        client.subcommands.set(file.subcommand, file);
       }
-    });
-  });
-
-  await rest.put(
-    Routes.applicationCommands(
-      "1009501419415552030"
-    ), {
-      body: allCommands
+      if (file.message_based) {
+        client.messagecommands.set(file.data.name, file);
+      } 
+      if (!file.message_based && !file.subcommand) {
+        client.commands.set(file.data.name, file);
+        client.restCommands.push(file.data);
+      }
+      console.log(
+        '>>'.bgBlue.white,
+        'Comando',
+        (file.data ? file.data.name: file.subcommand).yellow,
+        'cargado.'
+      );
+    } catch (e) {
+      console.log('>>'.bgRed.black, 'No se pudo cargar el archivo', filePath.yellow);
     }
-  );
-}
+  }
 
-module.exports = Commands;
+  await client.config.discord.publishCommands(client.restCommands);
+};

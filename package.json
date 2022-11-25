@@ -33,6 +33,7 @@
     "express-handlebars": "^6.0.6",
     "express-session": "^1.17.3",
     "ffmpeg-static": "^5.1.0",
+    "glob": "^8.0.3",
     "libsodium-wrappers": "^0.7.10",
     "mongoose": "^6.7.2",
     "passport-discord": "^0.1.4",

@@ -6,14 +6,31 @@ module.exports = {
   def_permission: 'ManageGuild',
   data: {
     name: 'sistemas',
+    name_localizations: {
+      'es-ES': 'sistemas',
+      'en-US': 'systems'
+    },
     description: 'Configura los sistemas del bot.',
+    description_localizations: {
+      'es-ES': 'Configurar los sistemas del bot.',
+      'en-US': 'Configure the bot systems.'
+    },
     options: [{
       type: 2,
-      name: 'uppercase',
+      name: 'caps',
+      name_localizations: {
+        'en-US': 'mayusculas',
+        'es-ES': 'caps'
+      },
       description: 'Ajustes del sistema anti mayúsculas.',
+      description_localizations: {
+        'es-ES': 'Configuración del sistema anti mayúsculas.',
+        'en-US': 'Anti caps system settings.'
+      },
       options: [{
         type: 1,
         name: 'habilitar',
+        
         description: 'Activa el sistema anti mayúsculas.',
       },
         {
@@ -76,7 +93,7 @@ module.exports = {
     const group = int.options.getSubcommandGroup();
     const subcommand = int.options.getSubcommand();
 
-    if (group === 'uppercase') {
+    if (group === 'caps') {
       if (subcommand === 'habilitar') {
         guildData.antiUpperCase.enabled = true;
         await client.config.models.Guild.findOneAndUpdate({
@@ -87,7 +104,7 @@ module.exports = {
           embeds: [
             new EmbedBuilder()
             .setTitle('Exito.')
-            .setDescription(`El sistema anti mayúsculas ha sido habilitado exitosamente, para inhabilitar esta función use el comando \`/sistemas uppercase inhabilitar\`.`)
+            .setDescription(`El sistema anti mayúsculas ha sido habilitado exitosamente, para inhabilitar esta función use el comando \`/sistemas caps inhabilitar\`.`)
             .setColor(client._defColor)
           ]
         });
@@ -102,7 +119,7 @@ module.exports = {
           embeds: [
             new EmbedBuilder()
             .setTitle('Exito.')
-            .setDescription(`El sistema anti mayúsculas ha sido inhabilitado exitosamente, para volver a habilitar esta función use el comando \`/sistemas uppercase habilitar\`.`)
+            .setDescription(`El sistema anti mayúsculas ha sido inhabilitado exitosamente, para volver a habilitar esta función use el comando \`/sistemas caps habilitar\`.`)
             .setColor(client._defColor)
           ]
         });
@@ -119,7 +136,7 @@ module.exports = {
               title: 'Roles ignorados.',
               description: 'Estos son los roles exentos de la función anti mayúsculas.\n' + listofroles,
               footer: {
-                text: 'Para agregar uno nuevo, usa /sistemas uppercase agregar-rol-ignorado rol:<rol> y para remover uno existente usa /sistemas uppercase remover-rol-ignorado rol:<rol>'
+                text: 'Para agregar uno nuevo, usa /sistemas caps agregar-rol-ignorado rol:<rol> y para remover uno existente usa /sistemas caps remover-rol-ignorado rol:<rol>'
               },
               color: client._defIntColor
             }
@@ -142,7 +159,7 @@ module.exports = {
               title: "Rol excluido.",
               description: `Se excluyó ${rol.toString()} del sistema anti mayúsculas, ahora este rol podrá escribir más del 75% del contenido de sus mensajes en mayúsculas.`,
               footer: {
-                text: 'Para retirar un rol de la lista de roles exentos, usa /sistemas uppercase remover-rol-ignorado rol:<@rol>'
+                text: 'Para retirar un rol de la lista de roles exentos, usa /sistemas caps remover-rol-ignorado rol:<@rol>'
               },
               color: client._defIntColor
             }

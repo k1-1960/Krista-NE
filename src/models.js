@@ -9,6 +9,10 @@ let AllSchemas = {
       type: String,
       required: true
     },
+    lang: {
+      type: String,
+      defualt: 'es-ES'
+    },
     antiUpperCase: {
       ignoredRoles: {
         type: Array,

@@ -5,11 +5,23 @@ const {
 module.exports = {
   data: {
     name: 'avatar',
-    description: 'Obten los avatares de un miembro.',
+    description: 'Obtenga los avatares de un miembro.',
+    description_localizations: {
+      'es-ES': 'Obtenga los avatares de un miembro.',
+      'en-US': 'Get a member\'s avatars.'
+    },
     options: [{
       type: 6,
       name: 'usuario',
-      description: 'Usuario del cual quieres obtener los avatares.',
+      name_localizations: {
+        'en-US': 'user',
+        'es-ES': 'usuario'
+      },
+      description: 'Usuario del que desea obtener los avatares.',
+      description_localizations: {
+        'es-ES': 'Usuario del que desea obtener los avatares.',
+        'en-US': 'User from whom you want to get the avatars.'
+      },
       required: false
     }]
   },
