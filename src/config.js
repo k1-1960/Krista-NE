@@ -29,7 +29,7 @@ module.exports = {
     async publishCommands (commands) {
       await rest.put(
         Routes.applicationCommands(
-          "1009501419415552030"
+          "1045913933191598130"
         ), {
           body: commands
         }
